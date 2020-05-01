@@ -1,6 +1,6 @@
 # Credivault
 
-## An application to securely store and retreive tour passwords.
+## An application to securely store and retreive your passwords.
 
 ---
 
