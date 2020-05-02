@@ -15,4 +15,12 @@ export class ApiService {
       fields
     );
   }
+
+  getDecryptedData(fields: any) {
+    this.loader.startDec();
+    return this.http.post(
+      'https://bme-encdec-server.herokuapp.com/decrypt',
+      fields
+    );
+  }
 }

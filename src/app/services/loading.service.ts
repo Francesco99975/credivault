@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 })
 export class LoadingService {
   loading: Subject<boolean> = new Subject<boolean>();
+  loading2: Subject<boolean> = new Subject<boolean>();
 
   constructor() {}
 
@@ -13,7 +14,15 @@ export class LoadingService {
     this.loading.next(true);
   }
 
+  startDec() {
+    this.loading2.next(true);
+  }
+
   stop() {
     this.loading.next(false);
+  }
+
+  stopDec() {
+    this.loading2.next(false);
   }
 }

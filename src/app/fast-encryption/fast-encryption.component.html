@@ -1,52 +1,139 @@
 <div class="container">
   <div class="row">
-    <form class="col s12" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="col s5 teal darken-3 z-depth-2">
       <div class="row">
-        <div class="input-field col s12">
-          <label for="message">Enter Text Data to Encrypt: </label>
+        <form class="col s12" [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="input-field col s12">
+              <label class="white-text" for="message"
+                >Enter Text Data to Encrypt:
+              </label>
+              <input
+                type="text"
+                name="message"
+                id="message"
+                formControlName="message"
+                class="white-text"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12 center-align">
+              <button
+                type="submit"
+                class="btn teal darken-2 waves-effect waves-light"
+                [disabled]="form.invalid || loading"
+              >
+                <span>Encrypt</span>
+                <i class="material-icons left">lock</i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="row">
+        <div class="col s12"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col s12"></div>
+      </div>
+      <div class="row" *ngIf="loading">
+        <div class="col s12 center-align">
+          <div class="progress">
+            <div class="indeterminate"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="encryptedMessage && !loading">
+        <div class="col s7 center-align">
           <input
             type="text"
-            name="message"
-            id="message"
-            formControlName="message"
+            name="encrypted"
+            id="encrypted"
+            class="truncate white-text"
+            [value]="encryptedMessage"
           />
         </div>
-      </div>
-      <div class="row">
-        <div class="col s12 center-align">
-          <button type="submit" class="btn teal darken-2">
-            <span>Encrypt</span>
-            <i class="material-icons left">lock</i>
-          </button>
+        <div class="col s5 center-align">
+          <a
+            class="btn waves-effect waves-light"
+            [copy-clipboard]="encryptedMessage"
+            (copied)="onCopy($event)"
+          >
+            <span>Copy</span>
+            <i class="material-icons left">assignment</i>
+          </a>
         </div>
       </div>
-    </form>
-  </div>
-  <div class="divider"></div>
-  <div class="row" *ngIf="loading">
-    <div class="col s12 center-align">
-      <div class="progress">
-        <div class="indeterminate"></div>
-      </div>
     </div>
-  </div>
-  <div class="row" *ngIf="encryptedMessage && !loading">
-    <div class="col s12 center-align">
-      <input
-        type="text"
-        name="encrypted"
-        id="encrypted"
-        class="truncate"
-        [value]="encryptedMessage"
-      />
-      <a
-        class="btn waves-effect waves-light"
-        [copy-clipboard]="encryptedMessage"
-        (copied)="onCopy($event)"
-      >
-        <span>Copy</span>
-        <i class="material-icons left">assignment</i>
-      </a>
+
+    <div class="col s5 teal darken-3 z-depth-2 offset-s2">
+      <div class="row">
+        <form class="col s12" [formGroup]="formDec" (ngSubmit)="onDecrypt()">
+          <div class="row">
+            <div class="input-field col s12">
+              <label class="white-text" for="demessage"
+                >Enter Text Data to Decrypt:
+              </label>
+              <input
+                type="text"
+                name="demessage"
+                id="demessage"
+                formControlName="encryptedMsg"
+                class="white-text"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12 center-align">
+              <button
+                type="submit"
+                class="btn teal darken-2 waves-effect waves-light"
+                [disabled]="formDec.invalid || loading2"
+              >
+                <span>Decrypt</span>
+                <i class="material-icons left">vpn_key</i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="row">
+        <div class="col s12"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col s12"></div>
+      </div>
+      <div class="row" *ngIf="loading2">
+        <div class="col s12 center-align">
+          <div class="progress">
+            <div class="indeterminate"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="decryptedMessage && !loading2">
+        <div class="col s7 center-align">
+          <input
+            type="text"
+            name="decrypted"
+            id="decrypted"
+            class="truncate white-text"
+            [value]="decryptedMessage"
+          />
+        </div>
+        <div class="col s5 center-align">
+          <a
+            class="btn waves-effect waves-light"
+            [copy-clipboard]="decryptedMessage"
+            (copied)="onCopy($event)"
+          >
+            <span>Copy</span>
+            <i class="material-icons left">assignment</i>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
