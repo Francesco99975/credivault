@@ -24,6 +24,10 @@ export class FastEncryptionComponent implements OnInit {
     });
   }
 
+  onCopy(payload: string) {
+    console.log(`${payload} copied to clipboard!`);
+  }
+
   onSubmit() {
     this.api
       .getEncryptedData({ data: this.form.get('message').value })

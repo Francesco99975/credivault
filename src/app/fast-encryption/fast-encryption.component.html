@@ -23,18 +23,30 @@
     </form>
   </div>
   <div class="divider"></div>
-  <div class="row" *ngIf="loading && !encryptedMessage">
+  <div class="row" *ngIf="loading">
     <div class="col s12 center-align">
       <div class="progress">
         <div class="indeterminate"></div>
       </div>
     </div>
   </div>
-  <div class="row" *ngIf="encryptedMessage">
+  <div class="row" *ngIf="encryptedMessage && !loading">
     <div class="col s12 center-align">
-      <textarea name="encrypted" id="encrypted" cols="30" rows="10">{{
-        encryptedMessage
-      }}</textarea>
+      <input
+        type="text"
+        name="encrypted"
+        id="encrypted"
+        class="truncate"
+        [value]="encryptedMessage"
+      />
+      <a
+        class="btn waves-effect waves-light"
+        [copy-clipboard]="encryptedMessage"
+        (copied)="onCopy($event)"
+      >
+        <span>Copy</span>
+        <i class="material-icons left">assignment</i>
+      </a>
     </div>
   </div>
 </div>

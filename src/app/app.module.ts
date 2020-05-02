@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { FastEncryptionComponent } from './fast-encryption/fast-encryption.component';
 import { PasswordsDatabaseComponent } from './passwords-database/passwords-database.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { CopyClipboardDirective } from './directives/copy-clipboard.directive';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { NavigationComponent } from './navigation/navigation.component';
     FastEncryptionComponent,
     PasswordsDatabaseComponent,
     NavigationComponent,
+    CopyClipboardDirective,
   ],
   imports: [
     BrowserModule,

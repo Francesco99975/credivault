@@ -1,16 +1,15 @@
 const electron = require("electron");
 const url = require("url");
 const path = require("path");
-const axios = require("axios");
 
-const { app, BrowserWindow, Menu, globalShortcut, ipcMain } = electron;
+const { app, BrowserWindow, Menu, globalShortcut } = electron;
 
 let mainWindow;
 
 //Listen for app to be ready
 app.on("ready", () => {
   mainWindow = new BrowserWindow({
-    width: 600,
+    width: 800,
     height: 600,
     webPreferences: {
       nodeIntegration: true,
@@ -52,16 +51,6 @@ app.on("activate", () => {
   if (mainWindow === null) {
     createWindow();
   }
-});
-
-// catch item add
-ipcMain.on("item:add", async (e, item) => {
-  encryptedCredentials = await axios.post(
-    "https://bme-encdec-server.herokuapp.com/encrypt",
-    item
-  );
-  console.log(encryptedCredentials.data);
-  console.log("Storing into local db");
 });
 
 //Create Menu Template
