@@ -2,7 +2,8 @@ import { Component, OnInit, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '../services/api.service';
 import { LoadingService } from '../services/loading.service';
-
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MessageComponent } from '../message/message.component';
 @Component({
   selector: 'app-fast-encryption',
   templateUrl: './fast-encryption.component.html',
@@ -21,11 +22,13 @@ export class FastEncryptionComponent implements OnInit, AfterViewInit {
   decryptedMessage: string = '';
   loading: boolean = false;
   loading2: boolean = false;
+  errorMsg: string = '';
 
   constructor(
     private api: ApiService,
     private loader: LoadingService,
-    private elemRef: ElementRef
+    private elemRef: ElementRef,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -52,20 +55,44 @@ export class FastEncryptionComponent implements OnInit, AfterViewInit {
   onSubmit() {
     this.api
       .getEncryptedData({ data: this.form.get('message').value })
-      .subscribe((res: any) => {
-        this.encryptedMessage = res.data;
-        this.loader.stop();
-        this.form.reset();
-      });
+      .subscribe(
+        (res: any) => {
+          this.encryptedMessage = res.data;
+          this.loader.stop();
+          this.form.reset();
+        },
+        (error) => {
+          this.errorMsg = error.error.error;
+          this.loader.stop();
+          this.form.reset();
+          this.dialog.open(MessageComponent, {
+            data: {
+              message: this.errorMsg,
+            },
+          });
+        }
+      );
   }
 
   onDecrypt() {
     this.api
       .getDecryptedData({ data: this.formDec.get('encryptedMsg').value })
-      .subscribe((res: any) => {
-        this.decryptedMessage = res.data;
-        this.loader.stopDec();
-        this.formDec.reset();
-      });
+      .subscribe(
+        (res: any) => {
+          this.decryptedMessage = res.data;
+          this.loader.stopDec();
+          this.formDec.reset();
+        },
+        (error) => {
+          this.errorMsg = error.error;
+          this.loader.stopDec();
+          this.formDec.reset();
+          this.dialog.open(MessageComponent, {
+            data: {
+              message: this.errorMsg,
+            },
+          });
+        }
+      );
   }
 }

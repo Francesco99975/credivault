@@ -1,0 +1,13 @@
+<h1 class="red-text text-darken-4" mat-dialog-title>Error</h1>
+<mat-dialog-content class="flow-text red-text text-darken-3"
+  >{{ data.message }}
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    class="red darken-3 white-text right"
+    mat-raised-button
+    (click)="closeMe()"
+  >
+    Dismiss
+  </button>
+</mat-dialog-actions>
