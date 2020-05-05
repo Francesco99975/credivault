@@ -2,17 +2,28 @@ import { Component, Inject, Injectable, OnInit } from '@angular/core';
 
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { ApiService } from '../services/api.service';
+import { LoadingService } from '../services/loading.service';
 
 @Component({
   templateUrl: 'credential-modal.component.html',
 })
 export class CredentialModalComponent implements OnInit {
   form: FormGroup;
+  loading: boolean = false;
 
-  constructor(private dialogRef: MatDialogRef<CredentialModalComponent>) {}
+  constructor(
+    private dialogRef: MatDialogRef<CredentialModalComponent>,
+    private api: ApiService,
+    private loader: LoadingService
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
+
+    this.loader.loading.subscribe((load: boolean) => {
+      this.loading = load;
+    });
   }
 
   private initForm() {
@@ -44,7 +55,7 @@ export class CredentialModalComponent implements OnInit {
     );
   }
 
-  onDeleteField(index) {
+  onDeleteField(index: number) {
     (<FormArray>this.form.get('fields')).removeAt(index);
   }
 
@@ -63,8 +74,11 @@ export class CredentialModalComponent implements OnInit {
       credentials: creds,
     };
 
-    console.log(data);
-
-    this.dialogRef.close();
+    this.api.getEncryptedData(data.credentials).subscribe((res: any) => {
+      data.credentials = res;
+      console.log(data);
+      this.loader.stop();
+      this.dialogRef.close();
+    });
   }
 }
