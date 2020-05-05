@@ -9,6 +9,7 @@ let mainWindow;
 //Listen for app to be ready
 app.on("ready", () => {
   mainWindow = new BrowserWindow({
+    title: "Credivault",
     width: 900,
     height: 600,
     webPreferences: {

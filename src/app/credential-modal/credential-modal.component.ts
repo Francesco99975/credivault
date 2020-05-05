@@ -35,6 +35,19 @@ export class CredentialModalComponent implements OnInit {
     return (this.form.get('fields') as FormArray).controls;
   }
 
+  onAddField() {
+    (<FormArray>this.form.get('fields')).push(
+      new FormGroup({
+        field: new FormControl(null, Validators.required),
+        credential: new FormControl(null, Validators.required),
+      })
+    );
+  }
+
+  onDeleteField(index) {
+    (<FormArray>this.form.get('fields')).removeAt(index);
+  }
+
   public onSubmit() {
     let creds = {};
 
