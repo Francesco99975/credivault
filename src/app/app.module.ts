@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +19,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { CopyClipboardDirective } from './directives/copy-clipboard.directive';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MessageComponent } from './message/message.component';
+import { CredentialModalComponent } from './credential-modal/credential-modal.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,7 @@ import { MessageComponent } from './message/message.component';
     NavigationComponent,
     CopyClipboardDirective,
     MessageComponent,
+    CredentialModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,6 +42,8 @@ import { MessageComponent } from './message/message.component';
     MatCardModule,
     MatFormFieldModule,
     MatDialogModule,
+    MatListModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
