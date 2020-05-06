@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxFsModule } from 'ngx-fs';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -44,6 +45,7 @@ import { CredentialModalComponent } from './credential-modal/credential-modal.co
     MatDialogModule,
     MatListModule,
     MatIconModule,
+    NgxFsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

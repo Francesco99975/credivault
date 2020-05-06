@@ -4,6 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ApiService } from '../services/api.service';
 import { LoadingService } from '../services/loading.service';
+import { DatabaseService } from '../services/database.service';
 
 @Component({
   templateUrl: 'credential-modal.component.html',
@@ -15,7 +16,8 @@ export class CredentialModalComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<CredentialModalComponent>,
     private api: ApiService,
-    private loader: LoadingService
+    private loader: LoadingService,
+    private db: DatabaseService
   ) {}
 
   ngOnInit(): void {
@@ -77,6 +79,7 @@ export class CredentialModalComponent implements OnInit {
     this.api.getEncryptedData(data.credentials).subscribe((res: any) => {
       data.credentials = res;
       console.log(data);
+      this.db.writeDB(data);
       this.loader.stop();
       this.dialogRef.close();
     });
