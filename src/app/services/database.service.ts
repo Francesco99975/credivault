@@ -14,6 +14,7 @@ export class DatabaseService {
   fileSystem: any;
   onUpdate: Subject<void> = new Subject<void>();
   masterPassword: string = '';
+  confirm: boolean = false;
 
   constructor(private fsService: FsService) {
     this.fileSystem = this.fsService.fs;

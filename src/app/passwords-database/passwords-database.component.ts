@@ -4,6 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { CredentialModalComponent } from '../credential-modal/credential-modal.component';
 import { DatabaseService } from '../services/database.service';
 import { MasterModalComponent } from '../master-modal/master-modal.component';
+import { ConfirmPasswordModalComponent } from '../confirm-password-modal/confirm-password-modal.component';
+import { CredentialsDisplayModalComponent } from '../credentials-display-modal/credentials-display-modal.component';
+import { LoadingService } from '../services/loading.service';
 
 @Component({
   selector: 'app-passwords-database',
@@ -12,11 +15,14 @@ import { MasterModalComponent } from '../master-modal/master-modal.component';
 })
 export class PasswordsDatabaseComponent implements OnInit {
   credentials: { owner: string; service: string; credentials: any }[] = [];
+  loading: boolean = false;
+  currentIndex: number = -1;
 
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
-    private db: DatabaseService
+    private db: DatabaseService,
+    private loader: LoadingService
   ) {}
 
   ngOnInit(): void {
@@ -44,10 +50,64 @@ export class PasswordsDatabaseComponent implements OnInit {
         console.log('Empty Databse');
       }
     });
+
+    this.loader.loading2.subscribe((load: boolean) => {
+      this.loading = load;
+    });
+  }
+
+  private confirm() {
+    return new Promise((resolve) => {
+      this.dialog
+        .open(ConfirmPasswordModalComponent, {
+          height: '500',
+          width: '700',
+        })
+        .afterClosed()
+        .subscribe(() => {
+          resolve();
+        });
+    });
   }
 
   onGet(index: number) {
-    console.log('getting credentials');
+    this.currentIndex = index;
+    if (this.db.masterPassword != '') {
+      this.confirm().then(() => {
+        if (this.db.confirm) {
+          let crd = this.credentials[index];
+          this.api.getDecryptedData(crd.credentials).subscribe(
+            (res: any) => {
+              crd.credentials = res;
+              this.loader.stopDec();
+              this.dialog.open(CredentialsDisplayModalComponent, {
+                height: '500',
+                width: '700',
+                data: {
+                  credentials: crd,
+                },
+              });
+            },
+            (error) => console.log('Error: ' + error.message)
+          );
+        } else {
+          console.log('Access Denied');
+        }
+      });
+    } else {
+      let crd = this.credentials[index];
+      this.api.getDecryptedData(crd.credentials).subscribe((res: any) => {
+        crd.credentials = res;
+        this.loader.stopDec();
+        this.dialog.open(CredentialsDisplayModalComponent, {
+          height: '500',
+          width: '700',
+          data: {
+            credentials: crd,
+          },
+        });
+      });
+    }
   }
 
   onDelete(index: number) {

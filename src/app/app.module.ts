@@ -22,6 +22,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MessageComponent } from './message/message.component';
 import { CredentialModalComponent } from './credential-modal/credential-modal.component';
 import { MasterModalComponent } from './master-modal/master-modal.component';
+import { ConfirmPasswordModalComponent } from './confirm-password-modal/confirm-password-modal.component';
+import { CredentialsDisplayModalComponent } from './credentials-display-modal/credentials-display-modal.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { MasterModalComponent } from './master-modal/master-modal.component';
     MessageComponent,
     CredentialModalComponent,
     MasterModalComponent,
+    ConfirmPasswordModalComponent,
+    CredentialsDisplayModalComponent,
   ],
   imports: [
     BrowserModule,
