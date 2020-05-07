@@ -23,4 +23,9 @@ export class ApiService {
       fields
     );
   }
+
+  getRandomPassword() {
+    this.loader.start();
+    return this.http.get('https://bme-encdec-server.herokuapp.com/randpass');
+  }
 }

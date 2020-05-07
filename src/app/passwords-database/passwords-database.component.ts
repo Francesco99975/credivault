@@ -3,7 +3,7 @@ import { ApiService } from '../services/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CredentialModalComponent } from '../credential-modal/credential-modal.component';
 import { DatabaseService } from '../services/database.service';
-import { empty } from 'rxjs';
+import { MasterModalComponent } from '../master-modal/master-modal.component';
 
 @Component({
   selector: 'app-passwords-database',
@@ -51,11 +51,18 @@ export class PasswordsDatabaseComponent implements OnInit {
   }
 
   onDelete(index: number) {
-    console.log('deleting credentials');
+    this.db.removeFromDB(index);
   }
 
   onAdd() {
     this.dialog.open(CredentialModalComponent, {
+      height: '500',
+      width: '700',
+    });
+  }
+
+  onSetMaster() {
+    this.dialog.open(MasterModalComponent, {
       height: '500',
       width: '700',
     });

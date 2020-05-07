@@ -13,9 +13,13 @@ export class DatabaseService {
   }> = [];
   fileSystem: any;
   onUpdate: Subject<void> = new Subject<void>();
+  masterPassword: string = '';
 
   constructor(private fsService: FsService) {
     this.fileSystem = this.fsService.fs;
+    this.readMasterPassword().then(() => {
+      console.log(this.masterPassword);
+    });
   }
 
   readDB() {
@@ -36,6 +40,35 @@ export class DatabaseService {
     });
   }
 
+  readMasterPassword() {
+    return new Promise((resolve, reject) => {
+      this.fileSystem.readFile(
+        'master.dat',
+        'utf8',
+        (error: any, data: any) => {
+          if (error) reject(error);
+
+          this.masterPassword = data;
+          resolve();
+        }
+      );
+    });
+  }
+
+  removeFromDB(index: number) {
+    try {
+      this.credentalDatabase.splice(index, 1);
+      this.fileSystem.writeFile(
+        'credentials.json',
+        JSON.stringify(this.credentalDatabase),
+        (error: any) => console.log(error)
+      );
+      this.onUpdate.next();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   writeDB(data: any) {
     try {
       this.credentalDatabase.push(data);
@@ -48,5 +81,19 @@ export class DatabaseService {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  writeMasterPassword(master: string) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.masterPassword = master;
+        this.fileSystem.writeFile('master.dat', master, (error: any) =>
+          reject(error)
+        );
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 }

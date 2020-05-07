@@ -21,6 +21,7 @@ import { CopyClipboardDirective } from './directives/copy-clipboard.directive';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MessageComponent } from './message/message.component';
 import { CredentialModalComponent } from './credential-modal/credential-modal.component';
+import { MasterModalComponent } from './master-modal/master-modal.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { CredentialModalComponent } from './credential-modal/credential-modal.co
     CopyClipboardDirective,
     MessageComponent,
     CredentialModalComponent,
+    MasterModalComponent,
   ],
   imports: [
     BrowserModule,
