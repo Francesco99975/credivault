@@ -18,9 +18,13 @@ export class DatabaseService {
 
   constructor(private fsService: FsService) {
     this.fileSystem = this.fsService.fs;
-    this.readMasterPassword().then(() => {
-      console.log(this.masterPassword);
-    });
+    this.readMasterPassword()
+      .then(() => {
+        console.log('got master password');
+      })
+      .catch((error) => {
+        this.masterPassword = '';
+      });
   }
 
   readDB() {

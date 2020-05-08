@@ -45,7 +45,7 @@ export class MasterModalComponent implements OnInit {
   }
 
   onCopy(cp: string) {
-    console.log(cp);
+    this.encryptedMaster = '';
   }
 
   onSubmit() {
@@ -89,6 +89,11 @@ export class MasterModalComponent implements OnInit {
             .catch((error) => console.log(error));
         });
     }
+  }
+
+  onReset() {
+    this.db.writeMasterPassword('');
+    this.close();
   }
 
   close() {

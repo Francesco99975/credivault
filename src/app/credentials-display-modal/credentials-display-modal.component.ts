@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -6,7 +6,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   templateUrl: './credentials-display-modal.component.html',
   styleUrls: ['./credentials-display-modal.component.scss'],
 })
-export class CredentialsDisplayModalComponent implements OnInit {
+export class CredentialsDisplayModalComponent implements OnInit, OnDestroy {
   owner: string;
   service: string;
   credentials: any;
@@ -21,6 +21,13 @@ export class CredentialsDisplayModalComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.owner = null;
+    this.service = null;
+    this.credentials = null;
+    this.data = null;
+  }
 
   close() {
     this.dialogRef.close();

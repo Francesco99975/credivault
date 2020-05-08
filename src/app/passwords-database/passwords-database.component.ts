@@ -30,10 +30,8 @@ export class PasswordsDatabaseComponent implements OnInit {
       .readDB()
       .then(() => {
         if (this.db.credentalDatabase.length > 0) {
-          console.log(this.db.credentalDatabase);
           this.credentials = this.db.credentalDatabase;
         } else {
-          console.log(this.db.credentalDatabase);
           console.log('Empty Databse');
         }
       })
@@ -43,10 +41,8 @@ export class PasswordsDatabaseComponent implements OnInit {
 
     this.db.onUpdate.subscribe(() => {
       if (this.db.credentalDatabase.length > 0) {
-        console.log(this.db.credentalDatabase);
         this.credentials = this.db.credentalDatabase;
       } else {
-        console.log(this.db.credentalDatabase);
         console.log('Empty Databse');
       }
     });
@@ -75,38 +71,53 @@ export class PasswordsDatabaseComponent implements OnInit {
     if (this.db.masterPassword != '') {
       this.confirm().then(() => {
         if (this.db.confirm) {
-          let crd = this.credentials[index];
-          this.api.getDecryptedData(crd.credentials).subscribe(
-            (res: any) => {
-              crd.credentials = res;
-              this.loader.stopDec();
-              this.dialog.open(CredentialsDisplayModalComponent, {
-                height: '500',
-                width: '700',
-                data: {
-                  credentials: crd,
-                },
-              });
-            },
-            (error) => console.log('Error: ' + error.message)
-          );
+          this.db.confirm = false;
+          this.api
+            .getDecryptedData(this.credentials[index].credentials)
+            .subscribe(
+              (res: any) => {
+                let crd = {
+                  owner: this.credentials[index].owner,
+                  service: this.credentials[index].service,
+                  credentials: {},
+                };
+                crd.credentials = res;
+                this.loader.stopDec();
+                this.dialog.open(CredentialsDisplayModalComponent, {
+                  height: '500',
+                  width: '700',
+                  data: {
+                    credentials: crd,
+                  },
+                });
+                crd = null;
+              },
+              (error) => console.log('Error: ' + error.message)
+            );
         } else {
           console.log('Access Denied');
         }
       });
     } else {
-      let crd = this.credentials[index];
-      this.api.getDecryptedData(crd.credentials).subscribe((res: any) => {
-        crd.credentials = res;
-        this.loader.stopDec();
-        this.dialog.open(CredentialsDisplayModalComponent, {
-          height: '500',
-          width: '700',
-          data: {
-            credentials: crd,
-          },
+      this.api
+        .getDecryptedData(this.credentials[index].credentials)
+        .subscribe((res: any) => {
+          let crd = {
+            owner: this.credentials[index].owner,
+            service: this.credentials[index].service,
+            credentials: {},
+          };
+          crd.credentials = res;
+          this.loader.stopDec();
+          this.dialog.open(CredentialsDisplayModalComponent, {
+            height: '500',
+            width: '700',
+            data: {
+              credentials: crd,
+            },
+          });
+          crd = null;
         });
-      });
     }
   }
 
