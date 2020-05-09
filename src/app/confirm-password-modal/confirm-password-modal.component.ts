@@ -33,9 +33,8 @@ export class ConfirmPasswordModalComponent implements OnInit {
   }
 
   onSubmit() {
-    this.api
-      .getDecryptedData({ data: this.db.masterPassword })
-      .subscribe((res: any) => {
+    this.api.getDecryptedData({ data: this.db.masterPassword }).subscribe(
+      (res: any) => {
         if (this.form.get('password').value === res.data) {
           this.db.confirm = true;
           this.loader.stopDec();
@@ -49,7 +48,18 @@ export class ConfirmPasswordModalComponent implements OnInit {
           });
           this.form.reset();
         }
-      });
+      },
+      (error) => {
+        this.loader.stopDec();
+        this.form.reset();
+        console.log(error.error);
+        this.dialog.open(MessageComponent, {
+          data: {
+            message: error.error,
+          },
+        });
+      }
+    );
   }
 
   close() {

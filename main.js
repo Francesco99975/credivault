@@ -4,6 +4,8 @@ const path = require("path");
 
 const { app, BrowserWindow, Menu, globalShortcut } = electron;
 
+process.env.NODE_ENV = "production";
+
 let mainWindow;
 
 //Listen for app to be ready
@@ -31,13 +33,45 @@ app.on("ready", () => {
     })
   );
 
-  //Build Menu from template
-  const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+  //Add developer tools if not in production
+  if (process.env.NODE_ENV !== "production") {
+    //Create Menu Template
+    const mainMenuTemplate = [
+      {
+        label: "File",
+        submenu: [
+          {
+            label: "Quit",
+            click() {
+              app.quit();
+            },
+          },
+        ],
+      },
+    ];
 
-  Menu.setApplicationMenu(mainMenu);
+    mainMenuTemplate.push({
+      label: "Developer Tools",
+      submenu: [
+        {
+          label: "Toggle DevTools",
+          click(item, focusedWindow) {
+            focusedWindow.toggleDevTools();
+          },
+        },
+      ],
+    });
+
+    //Build Menu from template
+    const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+
+    Menu.setApplicationMenu(mainMenu);
+  } else {
+    Menu.setApplicationMenu(null);
+  }
 
   mainWindow.on("closed", () => {
-    win = null;
+    mainWindow = null;
   });
 });
 
@@ -50,42 +84,13 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   // macOS specific close process
   if (mainWindow === null) {
-    createWindow();
+    mainWindow = new BrowserWindow({
+      title: "Credivault",
+      width: 900,
+      height: 600,
+      webPreferences: {
+        nodeIntegration: true,
+      },
+    });
   }
 });
-
-//Create Menu Template
-const mainMenuTemplate = [
-  {
-    label: "File",
-    submenu: [
-      {
-        label: "Quit",
-        click() {
-          app.quit();
-        },
-      },
-    ],
-  },
-];
-
-//Add developer tools if not in production
-
-if (process.env.NODE_ENV !== "production") {
-  mainMenuTemplate.push(
-    {
-      label: "Developer Tools",
-      submenu: [
-        {
-          label: "Toggle DevTools",
-          click(item, focusedWindow) {
-            focusedWindow.toggleDevTools();
-          },
-        },
-      ],
-    },
-    {
-      role: "reload",
-    }
-  );
-}

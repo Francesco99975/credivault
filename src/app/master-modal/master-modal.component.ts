@@ -38,10 +38,21 @@ export class MasterModalComponent implements OnInit {
   }
 
   generateRandomPassword() {
-    this.api.getRandomPassword().subscribe((pass: any) => {
-      this.form.value.master = pass.randomPassword;
-      this.loader.stop();
-    });
+    this.api.getRandomPassword().subscribe(
+      (pass: any) => {
+        this.form.value.master = pass.randomPassword;
+        this.loader.stop();
+      },
+      (error) => {
+        this.loader.stop();
+        console.log(error.error);
+        this.dialog.open(MessageComponent, {
+          data: {
+            message: error.error,
+          },
+        });
+      }
+    );
   }
 
   onCopy(cp: string) {
@@ -51,9 +62,8 @@ export class MasterModalComponent implements OnInit {
   onSubmit() {
     if (this.previous) {
       this.loader.start();
-      this.api
-        .getDecryptedData({ data: this.db.masterPassword })
-        .subscribe((res: any) => {
+      this.api.getDecryptedData({ data: this.db.masterPassword }).subscribe(
+        (res: any) => {
           if (this.form.get('prev').value === res.data) {
             this.api
               .getEncryptedData({ data: this.form.get('master').value })
@@ -75,19 +85,40 @@ export class MasterModalComponent implements OnInit {
             });
             this.form.reset();
           }
-        });
+        },
+        (error) => {
+          this.loader.stop();
+          console.log(error.error);
+          this.dialog.open(MessageComponent, {
+            data: {
+              message: error.error,
+            },
+          });
+        }
+      );
     } else {
       this.api
         .getEncryptedData({ data: this.form.get('master').value })
-        .subscribe((res: any) => {
-          this.db
-            .writeMasterPassword(res.data)
-            .then(() => {
-              this.encryptedMaster = this.db.masterPassword;
-              this.loader.stop();
-            })
-            .catch((error) => console.log(error));
-        });
+        .subscribe(
+          (res: any) => {
+            this.db
+              .writeMasterPassword(res.data)
+              .then(() => {
+                this.encryptedMaster = this.db.masterPassword;
+                this.loader.stop();
+              })
+              .catch((error) => console.log(error));
+          },
+          (error) => {
+            this.loader.stop();
+            console.log(error.error);
+            this.dialog.open(MessageComponent, {
+              data: {
+                message: error.error,
+              },
+            });
+          }
+        );
     }
   }
 

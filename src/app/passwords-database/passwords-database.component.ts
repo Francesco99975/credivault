@@ -7,6 +7,7 @@ import { MasterModalComponent } from '../master-modal/master-modal.component';
 import { ConfirmPasswordModalComponent } from '../confirm-password-modal/confirm-password-modal.component';
 import { CredentialsDisplayModalComponent } from '../credentials-display-modal/credentials-display-modal.component';
 import { LoadingService } from '../services/loading.service';
+import { MessageComponent } from '../message/message.component';
 
 @Component({
   selector: 'app-passwords-database',
@@ -92,16 +93,23 @@ export class PasswordsDatabaseComponent implements OnInit {
                 });
                 crd = null;
               },
-              (error) => console.log('Error: ' + error.message)
+              (error) => {
+                this.loader.stopDec();
+                console.log(error.error);
+                this.dialog.open(MessageComponent, {
+                  data: {
+                    message: error.error,
+                  },
+                });
+              }
             );
         } else {
           console.log('Access Denied');
         }
       });
     } else {
-      this.api
-        .getDecryptedData(this.credentials[index].credentials)
-        .subscribe((res: any) => {
+      this.api.getDecryptedData(this.credentials[index].credentials).subscribe(
+        (res: any) => {
           let crd = {
             owner: this.credentials[index].owner,
             service: this.credentials[index].service,
@@ -117,7 +125,17 @@ export class PasswordsDatabaseComponent implements OnInit {
             },
           });
           crd = null;
-        });
+        },
+        (error) => {
+          this.loader.stopDec();
+          console.log(error.error);
+          this.dialog.open(MessageComponent, {
+            data: {
+              message: error.error,
+            },
+          });
+        }
+      );
     }
   }
 

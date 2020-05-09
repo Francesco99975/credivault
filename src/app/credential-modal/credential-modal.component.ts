@@ -1,10 +1,11 @@
 import { Component, Inject, Injectable, OnInit } from '@angular/core';
 
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ApiService } from '../services/api.service';
 import { LoadingService } from '../services/loading.service';
 import { DatabaseService } from '../services/database.service';
+import { MessageComponent } from '../message/message.component';
 
 @Component({
   templateUrl: 'credential-modal.component.html',
@@ -17,7 +18,8 @@ export class CredentialModalComponent implements OnInit {
     private dialogRef: MatDialogRef<CredentialModalComponent>,
     private api: ApiService,
     private loader: LoadingService,
-    private db: DatabaseService
+    private db: DatabaseService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -76,12 +78,23 @@ export class CredentialModalComponent implements OnInit {
       credentials: creds,
     };
 
-    this.api.getEncryptedData(data.credentials).subscribe((res: any) => {
-      data.credentials = res;
-      console.log(data);
-      this.db.writeDB(data);
-      this.loader.stop();
-      this.dialogRef.close();
-    });
+    this.api.getEncryptedData(data.credentials).subscribe(
+      (res: any) => {
+        data.credentials = res;
+        console.log(data);
+        this.db.writeDB(data);
+        this.loader.stop();
+        this.dialogRef.close();
+      },
+      (error) => {
+        this.loader.stop();
+        console.log(error.error);
+        this.dialog.open(MessageComponent, {
+          data: {
+            message: error.error,
+          },
+        });
+      }
+    );
   }
 }
