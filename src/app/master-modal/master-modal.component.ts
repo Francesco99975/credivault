@@ -6,6 +6,7 @@ import { ApiService } from '../services/api.service';
 import { LoadingService } from '../services/loading.service';
 import { DatabaseService } from '../services/database.service';
 import { MessageComponent } from '../message/message.component';
+import { ConfirmPasswordModalComponent } from '../confirm-password-modal/confirm-password-modal.component';
 
 @Component({
   selector: 'app-master-modal',
@@ -34,6 +35,20 @@ export class MasterModalComponent implements OnInit {
 
     this.loader.loading.subscribe((load: boolean) => {
       this.loading = load;
+    });
+  }
+
+  private confirm() {
+    return new Promise((resolve) => {
+      this.dialog
+        .open(ConfirmPasswordModalComponent, {
+          height: '500',
+          width: '700',
+        })
+        .afterClosed()
+        .subscribe(() => {
+          resolve();
+        });
     });
   }
 
@@ -123,8 +138,15 @@ export class MasterModalComponent implements OnInit {
   }
 
   onReset() {
-    this.db.writeMasterPassword('');
-    this.close();
+    this.confirm().then(() => {
+      if (this.db.confirm) {
+        this.db.confirm = false;
+        this.db.writeMasterPassword('');
+        this.close();
+      } else {
+        console.log('Access Denied!');
+      }
+    });
   }
 
   close() {

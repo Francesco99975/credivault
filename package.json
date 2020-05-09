@@ -10,7 +10,10 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "electron .",
-    "electron-build": "ng build --prod && electron ."
+    "electron-build": "ng build --prod && electron .",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=src/assets/icons/mac/credivault.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . credivault --overwrite --asar=true --platform=win32 --arch=x64 --icon=src/assets/icons/win/credivault.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Credivault\"",
+    "package-linux": "electron-packager . credivault --overwrite --asar=true --platform=linux --arch=x64 --icon=src/assets/icons/png/credivault.png --prune=true --out=release-builds"
   },
   "private": true,
   "dependencies": {

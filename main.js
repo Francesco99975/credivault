@@ -14,6 +14,7 @@ app.on("ready", () => {
     title: "Credivault",
     width: 900,
     height: 600,
+    icon: "src/assets/icons/png/credivault.png",
     webPreferences: {
       nodeIntegration: true,
     },
