@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FsService } from 'ngx-fs';
 import { Subject } from 'rxjs';
+import { ElectronService } from 'ngx-electron';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +16,10 @@ export class DatabaseService {
   onUpdate: Subject<void> = new Subject<void>();
   masterPassword: string = '';
   confirm: boolean = false;
+  storePath: string = '';
 
-  constructor(private fsService: FsService) {
+  constructor(private fsService: FsService, private electron: ElectronService) {
+    this.storePath = this.electron.remote.app.getPath('userData');
     this.fileSystem = this.fsService.fs;
     this.readMasterPassword()
       .then(() => {
@@ -31,7 +34,7 @@ export class DatabaseService {
     return new Promise((resolve, reject) => {
       try {
         this.fileSystem.readFile(
-          'credentials.json',
+          this.storePath + '/credentials.json',
           (error: any, data: any) => {
             if (error) reject(error);
 
@@ -48,7 +51,7 @@ export class DatabaseService {
   readMasterPassword() {
     return new Promise((resolve, reject) => {
       this.fileSystem.readFile(
-        'master.dat',
+        this.storePath + '/master.dat',
         'utf8',
         (error: any, data: any) => {
           if (error) reject(error);
@@ -64,7 +67,7 @@ export class DatabaseService {
     try {
       this.credentalDatabase.splice(index, 1);
       this.fileSystem.writeFile(
-        'credentials.json',
+        this.storePath + '/credentials.json',
         JSON.stringify(this.credentalDatabase),
         (error: any) => console.log(error)
       );
@@ -78,7 +81,7 @@ export class DatabaseService {
     try {
       this.credentalDatabase.push(data);
       this.fileSystem.writeFile(
-        'credentials.json',
+        this.storePath + '/credentials.json',
         JSON.stringify(this.credentalDatabase),
         (error: any) => console.log(error)
       );
@@ -92,8 +95,10 @@ export class DatabaseService {
     return new Promise((resolve, reject) => {
       try {
         this.masterPassword = master;
-        this.fileSystem.writeFile('master.dat', master, (error: any) =>
-          reject(error)
+        this.fileSystem.writeFile(
+          this.storePath + '/master.dat',
+          master,
+          (error: any) => reject(error)
         );
         resolve();
       } catch (error) {

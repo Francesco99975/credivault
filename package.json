@@ -24,6 +24,8 @@
     "@angular/platform-browser": "~9.1.0",
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/router": "~9.1.0",
+    "@types/electron": "^1.6.10",
+    "ngx-electron": "^2.2.0",
     "ngx-fs": "0.0.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

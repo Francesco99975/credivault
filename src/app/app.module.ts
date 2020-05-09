@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxFsModule } from 'ngx-fs';
+import { NgxElectronModule } from 'ngx-electron';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -52,6 +53,7 @@ import { CredentialsDisplayModalComponent } from './credentials-display-modal/cr
     MatListModule,
     MatIconModule,
     NgxFsModule,
+    NgxElectronModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
