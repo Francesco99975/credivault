@@ -1,7 +1,7 @@
 # Credivault
 
-## An application to securely store and retreive your passwords.
+## An application to securely store and retreive your credentials.
 
 ---
 
-> Project Status: Work in Progrss
+> Project Status: Version 1.0 Released
