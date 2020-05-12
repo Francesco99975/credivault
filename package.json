@@ -13,8 +13,12 @@
     "electron-build": "ng build --prod && electron .",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=src/assets/icons/mac/credivault.icns --prune=true --out=release-builds",
     "package-win": "electron-packager . credivault --overwrite --asar=true --platform=win32 --arch=x64 --icon=src/assets/icons/win/credivault.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Credivault\"",
-    "package-linux": "electron-packager . credivault --overwrite --asar=true --platform=linux --arch=x64 --icon=src/assets/icons/png/credivault.png --prune=true --out=release-builds"
+    "package-linux": "electron-packager . credivault --overwrite --asar=true --platform=linux --arch=x64 --icon=src/assets/icons/png/credivault.png --prune=true --out=release-builds",
+    "build-win": "electron-builder --windows",
+    "build-linux": "electron-builder --linux",
+    "build-mac": "electron-builder --mac"
   },
+  "author": "Francesco Michele Barranca <francescobarranca@outlook.com>",
   "private": true,
   "dependencies": {
     "@angular/animations": "~9.1.0",
@@ -44,6 +48,7 @@
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
     "electron": "^8.2.5",
+    "electron-builder": "^22.6.0",
     "electron-packager": "^14.2.1",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
@@ -56,5 +61,47 @@
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~3.8.3"
+  },
+  "build": {
+    "appId": "com.francesco.credivault",
+    "productName": "Credivault",
+    "copyright": "Copyright @ 2020 Francesco Michele Barranca",
+    "directories": {
+      "buildResources": "./src/assets",
+      "output": "./release-builds",
+      "app": "."
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "icons/win/credivault.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "icons/win/credivault.ico",
+      "uninstallerIcon": "icons/win/credivault.ico"
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage",
+        "pacman"
+      ],
+      "category": "Utility",
+      "icon": "icons/png/credivault.png",
+      "synopsis": "Desktop Application that encrypts and stores your credentials for any service locally on your machine"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        "mas",
+        "pkg"
+      ],
+      "icon": "icons/mac/credivault.icns"
+    }
   }
 }
